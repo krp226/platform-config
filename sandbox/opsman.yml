@@ -1,0 +1,22 @@
+---
+opsman-configuration:
+  vsphere:
+    vcenter:
+      url: vcsa-01.haas-245.pez.pivotal.io
+      username: Administrator@vsphere.local
+      password: WrUsgixKx8nzbxyuxS!
+      datastore: LUN01
+      datacenter: Datacenter
+      resource_pool: /Datacenter/host/Cluster/Resources/pas-az1
+      folder: /Datacenter/vm/
+      insecure: 1
+    disk_type: thin
+    dns: 10.192.2.10
+    ntp: ntp1.svc.pivotal.io
+    gateway: 192.168.1.1
+    hostname: ops-manager.sandbox.haas-245.pez.pivotal.io
+    netmask: 255.255.255.0
+    network: PAS-Infrastructure
+    private_ip: 192.168.1.10
+    ssh_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDUH0Kp/v/U7fm3qHbgKAG6yWqm6idJodKiuTaKi39CymPng2x9ogth7asS5zYUus9zlt4gWkiEHPdIEfP3bd+OdzKGj9ZxqYlpD+TKIVyxwG2PSpCel9BUZ6dYRRIHHAbyV5Kdqr1rX6DAb4chrQ3mgsFjg6EhnzXpf2T17DgrTZKZ4QhUZqxN11kjHtrSzwNxtwuVPfFeDdx8y8XiPwNV6s8D+rIm/uM8Q5rR0OzAKO9c6UquNuosrXt1EqCKB2DMN2Bq/FWKs+HUE2vNJZFAw4sIe7eCNchmjZXe5rZUPNgXSt4Uo2+Aocm7kknErvweou7NjGG7w/B4rBPw4cgazGS8PyFZku6rcMuWOUH3ARKZ2gRJQxI1KcNueYI5r79/GhUOekM287CpJBgLpcKGNVdIpBzRDhjFq859Txyn5Z0Rz+6E3oG0evLfjoi9rHueX+VU0ld3/heURaI2JtMWYnewDSpXP/rSdJDccpLA5YVhUAhvpfnF++XTx63xhUgrIr4CZdMMUaxki7PnYdIXwQvwrLy6rTmn9Pkf0ZatqIZOlpFGTHNdjvQOhqm5TJAQY+0oRyXY++RGBL/kxH7Wrx3C0AkmWSTJ94i1D31zIj9sfZ173GtEiSOrrmLJtaRVhBC9LlTEpzbH5ZVO7mrxUYAQzP2wwLE9D6ygPBimow== krp226@gmail.com
+    vm_name: sandbox-opsman
