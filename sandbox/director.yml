@@ -1,50 +1,19 @@
 az-configuration:
 - name: AZ1
-  iaas_configuration_name: vcsa-01
   clusters:
   - cluster: Cluster
-    drs_rule: MUST
-    guid: 7ae4dcd25edc52c558b8
-    host_group: null
-    resource_pool: null
-  guid: f46c6a220c2c306b3926
+    resource_pool: pas-az1
+  iaas_configuration_guid: 
 - name: AZ2
-  iaas_configuration_name: vcsa-01
   clusters:
   - cluster: Cluster
-    drs_rule: MUST
-    guid: d3eaa20d2c2352ff6dea
-    host_group: null
-    resource_pool: null
-  guid: dc237ef65523b56f269c
-- name: 'AZ3 '
-  iaas_configuration_name: vcsa-01
+    resource_pool: pas-az2
+  iaas_configuration_guid: 
+- name: AZ3
   clusters:
   - cluster: Cluster
-    drs_rule: MUST
-    guid: 607804abf60cc7d62c98
-    host_group: null
-    resource_pool: null
-  guid: d94a0af18ce72735662a
-iaas-configurations:
-- additional_cloud_properties: {}
-  bosh_disk_path: ((iaas-configurations_0_bosh_disk_path))
-  bosh_template_folder: ((iaas-configurations_0_bosh_template_folder))
-  bosh_vm_folder: ((iaas-configurations_0_bosh_vm_folder))
-  datacenter: ((iaas-configurations_0_datacenter))
-  disk_type: ((iaas-configurations_0_disk_type))
-  ephemeral_datastores_string: ((iaas-configurations_0_ephemeral_datastores_string))
-  name: ((iaas-configurations_0_name))
-  nsx_address: ((iaas-configurations_0_nsx_address))
-  nsx_ca_certificate: ((iaas-configurations_0_nsx_ca_certificate))
-  nsx_mode: ((iaas-configurations_0_nsx_mode))
-  nsx_networking_enabled: ((iaas-configurations_0_nsx_networking_enabled))
-  nsx_t_auth_type: ((iaas-configurations_0_nsx_t_auth_type))
-  nsx_username: ((iaas-configurations_0_nsx_username))
-  persistent_datastores_string: ((iaas-configurations_0_persistent_datastores_string))
-  ssl_verification_enabled: ((iaas-configurations_0_ssl_verification_enabled))
-  vcenter_host: ((iaas-configurations_0_vcenter_host))
-  vcenter_username: ((iaas-configurations_0_vcenter_username))
+    resource_pool: pas-az3
+  iaas_configuration_guid: 
 network-assignment:
   network:
     name: PAS-Infrastructure
@@ -56,23 +25,44 @@ networks-configuration:
   networks:
   - name: PAS-Infrastructure
     subnets:
-    - iaas_identifier: VM Network
+    - iaas_identifier: PAS-Infrastructure
       cidr: 192.168.1.0/24
       dns: 10.192.2.10
       gateway: 192.168.1.1
-      reserved_ip_ranges: '192.168.1.1-192.168.1.10 '
+      reserved_ip_ranges: 192.168.1.1-192.168.1.10
       availability_zone_names:
       - AZ1
       - AZ2
-      - 'AZ3 '
+      - AZ3
+  - name: PAS-Deployment
+    subnets:
+    - iaas_identifier: PAS-Deployment
+      cidr: 192.168.2.0/24
+      dns: 10.192.2.10
+      gateway: 192.168.2.1
+      reserved_ip_ranges: ""
+      availability_zone_names:
+      - AZ1
+      - AZ2
+      - AZ3
+  - name: PAS-Services
+    subnets:
+    - iaas_identifier: PAS-Services
+      cidr: 192.168.3.0/24
+      dns: 10.192.2.10
+      gateway: 192.168.3.1
+      reserved_ip_ranges: ""
+      availability_zone_names:
+      - AZ1
+      - AZ2
+      - AZ3
 properties-configuration:
   director_configuration:
+    allow_legacy_agents: true
     blobstore_type: local
-    bosh_director_recreate_on_next_deploy: false
     bosh_recreate_on_next_deploy: false
     bosh_recreate_persistent_disks_on_next_deploy: false
     database_type: internal
-    director_metrics_server_enabled: true
     director_worker_count: 5
     encryption:
       keys: []
@@ -82,23 +72,39 @@ properties-configuration:
     hm_pager_duty_options:
       enabled: false
     identification_tags: {}
-    job_configuration_on_tmpfs: false
     keep_unreachable_vms: false
     local_blobstore_options:
-      enable_signed_urls: true
-    metrics_server_enabled: true
-    ntp_servers_string: ntp1.svc.pivotal.io
+      tls_enabled: true
+    ntp_servers_string: time.svc.pivotal.io
     post_deploy_enabled: false
-    resurrector_enabled: false
+    resurrector_enabled: true
     retry_bosh_deploys: false
-    skip_director_drain: false
-    system_metrics_runtime_enabled: true
+    skip_director_drain: true
   dns_configuration:
     excluded_recursors: []
     handlers: []
+  iaas_configuration:
+    additional_cloud_properties: {}
+    bosh_disk_path: pcf_disk
+    bosh_template_folder: pcf_templates
+    bosh_vm_folder: pcf_vms
+    datacenter: Datacenter
+    disk_type: thin
+    ephemeral_datastores_string: LUN01
+    guid: fa7e89c5ef5f72b16b8a
+    name: default
+    nsx_address: nsxmgr-245.pez.pivotal.io
+    nsx_ca_certificate: ((nsx_ca_cert.certificate))
+    nsx_mode: nsx-t
+    nsx_networking_enabled: true
+    nsx_username: admin
+    nsx_password: ((nsx_password))
+    persistent_datastores_string: LUN01
+    ssl_verification_enabled: false
+    vcenter_host: vcsa-01.haas-<num>.pez.pivotal.io
+    vcenter_username: Administrator@vsphere.local
+    vcenter_password: ((vcenter_password))
   security_configuration:
-    generate_vm_passwords: ((properties-configuration_security_configuration_generate_vm_passwords))
-    opsmanager_root_ca_trusted_certs: false
     trusted_certificates: ((my_ca.certificate))
     generate_vm_passwords: true
     opsmanager_root_ca_trusted_certs: true
@@ -106,35 +112,20 @@ properties-configuration:
     enabled: false
 resource-configuration:
   compilation:
-    additional_networks: []
-    additional_vm_extensions: []
+    instances: automatic
     instance_type:
       id: automatic
-    instances: automatic
-    nsx:
-      lbs: []
-      security_groups: []
-    nsxt:
-      lb:
-        server_pools: []
-      ns_groups: []
-    swap_as_percent_of_memory_size: automatic
   director:
-    additional_networks: []
-    additional_vm_extensions: []
-    instance_type:
-      id: automatic
     instances: automatic
-    nsx:
-      lbs: []
-      security_groups: []
-    nsxt:
-      lb:
-        server_pools: []
-      ns_groups: []
     persistent_disk:
       size_mb: automatic
-    swap_as_percent_of_memory_size: automatic
-vmextensions-configuration: []
-vmtypes-configuration: {}
-
+    instance_type:
+      id: automatic
+vmextensions-configuration:
+- name: router-extension
+  cloud_properties:
+    nsxt:
+      lb:
+        server_pools:
+        - name: PAS-GoRouter443ServerPool
+          port: 443
