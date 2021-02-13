@@ -5,3 +5,7 @@ pivnet-product-slug: elastic-runtime
 product-version-regex: ^2\.10\.\d+$
 blobstore-bucket: ((s3.bucket_name))
 stemcell-iaas: vsphere
+s3-access-key-id: ((s3.access_key))
+s3-secret-access-key: ((s3.secret_key))
+s3-endpoint: ((s3.address))
+s3-region-name: region
