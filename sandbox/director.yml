@@ -101,7 +101,7 @@ properties-configuration:
     nsx_password: ((nsx_password))
     persistent_datastores_string: LUN01
     ssl_verification_enabled: false
-    vcenter_host: vcsa-01.haas-<num>.pez.pivotal.io
+    vcenter_host: vcsa-01.haas-245.pez.pivotal.io
     vcenter_username: Administrator@vsphere.local
     vcenter_password: ((vcenter_password))
   security_configuration:
